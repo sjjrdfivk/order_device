@@ -74,6 +74,10 @@ class _OrderPage extends State<OrderPage> {
     _listScrollController2.jumpTo(itemRightArr[index]);
   }
 
+  void reduceChange() {}
+
+  void addChange() {}
+
   @override
   Widget build(BuildContext context) {
     mediaQuery ??= MediaQuery.of(context);
@@ -150,9 +154,12 @@ class _OrderPage extends State<OrderPage> {
   }
 
   var orderFormStyle = new TextStyle(
-      color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800);
-
+    color: Colors.white,
+    fontSize: 20,
+    fontWeight: FontWeight.w800,
+  );
   var radiusCon = Radius.circular(40);
+
   Positioned orderForm() {
     return Positioned(
       height: 60,
@@ -280,11 +287,18 @@ class _OrderPage extends State<OrderPage> {
                   Row(
                     children: [
                       IconButton(
-                          icon: Icon(Icons.do_disturb_on_sharp),
-                          onPressed: () {}),
+                        icon: Icon(Icons.do_disturb_on_sharp),
+                        onPressed: () {
+                          reduceChange();
+                        },
+                      ),
                       Text('0'),
                       IconButton(
-                          icon: Icon(Icons.add_circle), onPressed: () {}),
+                        icon: Icon(Icons.add_circle),
+                        onPressed: () {
+                          addChange();
+                        },
+                      ),
                     ],
                   )
                 ],

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 // import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+import 'package:common_utils/common_utils.dart';
 // import 'package:order_device/provider/order.dart';
 // import 'package:flutter/scheduler.dart';
 
 import 'shop/shop_scroll_controller.dart';
 import 'shop/shop_scroll_coordinator.dart';
 import 'order_data.dart';
+import 'package:order_device/route/navigator_util.dart';
 
 MediaQueryData mediaQuery;
 
@@ -24,6 +26,7 @@ class _OrderPage extends State<OrderPage> {
   ShopScrollController _listScrollController1;
   ShopScrollController _listScrollController2;
 
+  String totalPrice = '0';
   int activeIndex = 0;
   double itemRightHeight = 150;
   double stickyHeaderHegiht = 30;
@@ -59,14 +62,6 @@ class _OrderPage extends State<OrderPage> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _listScrollController1?.dispose();
-    _listScrollController2?.dispose();
-    _listScrollController1 = _listScrollController2 = null;
-    super.dispose();
-  }
-
   void changeActiveIndex(int index) {
     setState(() {
       activeIndex = index;
@@ -74,9 +69,43 @@ class _OrderPage extends State<OrderPage> {
     _listScrollController2.jumpTo(itemRightArr[index]);
   }
 
-  void reduceChange() {}
+  void reduceChange(int index, int i) {
+    var data = listData[index]['list'][i];
+    double price = double.parse(data['price']);
+    setState(() {
+      if (int.parse(data['num']) <= 1) {
+        data['num'] = '0';
+      } else {
+        data['num'] = (int.parse(data['num']) - 1).toString();
+      }
+      totalPrice =
+          (NumUtil.getNumByValueDouble(double.parse(totalPrice) - price, 2))
+              .toStringAsFixed(2);
+    });
+  }
 
-  void addChange() {}
+  void addChange(int index, int i) {
+    var data = listData[index]['list'][i];
+    double price = double.parse(data['price']);
+    setState(() {
+      if (data['num'] != null) {
+        data['num'] = (int.parse(data['num']) + 1).toString();
+      } else {
+        data['num'] = '1';
+      }
+      totalPrice =
+          (NumUtil.getNumByValueDouble(double.parse(totalPrice) + price, 2))
+              .toStringAsFixed(2);
+    });
+  }
+
+  @override
+  void dispose() {
+    _listScrollController1?.dispose();
+    _listScrollController2?.dispose();
+    _listScrollController1 = _listScrollController2 = null;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +177,7 @@ class _OrderPage extends State<OrderPage> {
             ),
           ],
         ),
-        orderForm(),
+        orderForm(context),
       ],
     );
   }
@@ -160,7 +189,7 @@ class _OrderPage extends State<OrderPage> {
   );
   var radiusCon = Radius.circular(40);
 
-  Positioned orderForm() {
+  Positioned orderForm(context) {
     return Positioned(
       height: 60,
       width: mediaQuery.size.width,
@@ -172,47 +201,69 @@ class _OrderPage extends State<OrderPage> {
           children: [
             Expanded(
               flex: 2,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: radiusCon, bottomLeft: radiusCon),
-                  color: Colors.black,
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 60,
-                      height: 60,
-                      child: Image.asset('assets/images/settle.png'),
+              child: InkWell(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '¥30.1',
-                          style: orderFormStyle,
+                    builder: (context) {
+                      return Container(
+                        height: 300,
+                        child: Center(
+                          child: Text('下单吧!'),
                         ),
-                        Text(
-                          '预估配送费¥3',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: radiusCon, bottomLeft: radiusCon),
+                    color: Colors.black,
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 60,
+                        height: 60,
+                        child: Image.asset('assets/images/settle.png'),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '¥$totalPrice',
+                            style: orderFormStyle,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          Text(
+                            '预估配送费¥3',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
             Expanded(
               child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topRight: radiusCon, bottomRight: radiusCon),
-                    color: Colors.yellow,
-                  ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topRight: radiusCon, bottomRight: radiusCon),
+                  color: Colors.yellow,
+                ),
+                child: InkWell(
+                  onTap: () {
+                    NavigatorUtil.jump(context, '/payBuyPage');
+                  },
                   child: Center(
                     child: Text(
                       '去结算',
@@ -221,7 +272,9 @@ class _OrderPage extends State<OrderPage> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                  )),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -281,22 +334,26 @@ class _OrderPage extends State<OrderPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '¥30.1',
+                    '¥${listData[index]['list'][i]['price']}',
                     style: TextStyle(color: Colors.red[400]),
                   ),
                   Row(
                     children: [
-                      IconButton(
-                        icon: Icon(Icons.do_disturb_on_sharp),
-                        onPressed: () {
-                          reduceChange();
-                        },
-                      ),
-                      Text('0'),
+                      if (listData[index]['list'][i]['num'] != null &&
+                          int.parse(listData[index]['list'][i]['num']) >= 1)
+                        IconButton(
+                          icon: Icon(Icons.do_disturb_on_sharp),
+                          onPressed: () {
+                            reduceChange(index, i);
+                          },
+                        ),
+                      if (listData[index]['list'][i]['num'] != null &&
+                          int.parse(listData[index]['list'][i]['num']) >= 1)
+                        Text(listData[index]['list'][i]['num'] ?? '0'),
                       IconButton(
                         icon: Icon(Icons.add_circle),
                         onPressed: () {
-                          addChange();
+                          addChange(index, i);
                         },
                       ),
                     ],

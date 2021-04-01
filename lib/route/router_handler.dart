@@ -8,6 +8,7 @@ import 'package:order_device/pages/normal_page/left_list_view_page.dart';
 import 'package:order_device/pages/routing_reference/routing_reference.dart';
 import 'package:order_device/pages/login/login.dart';
 import 'package:order_device/pages/login/user_agreement.dart';
+import 'package:order_device/pages/pay_page/index.dart';
 
 /* *
  * handler就是每个路由的规则，编写handler就是配置路由规则，
@@ -59,4 +60,10 @@ Handler detailT = Handler(
 Handler userAgreementHanderl = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return UserAgreement();
+});
+
+// 支付
+Handler payPageHanderl = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return PayPage();
 });

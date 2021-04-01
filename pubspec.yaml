@@ -40,6 +40,7 @@ dependencies:
   synchronized: ^3.0.0
   shared_preferences: ^2.0.5
   fluttertoast: ^7.1.8
+  common_utils: ^2.0.2 #Dart常用工具类库。包含日期，正则，倒计时，时间轴等工具类
 
 dev_dependencies:
   flutter_test:

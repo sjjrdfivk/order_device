@@ -13,6 +13,7 @@ class Routes {
   static String detailP = '/detailT';
   static String userAgreement = '/user_agreement';
   static String listTestPage = '/list_test_page';
+  static String payBuyPage = '/payBuyPage';
   // 定义路由处理函数
   static void configureRoutes(FluroRouter router) {
     router.notFoundHandler = new Handler(
@@ -31,5 +32,6 @@ class Routes {
     router.define(login, handler: loginHanderl);
     router.define(userAgreement, handler: userAgreementHanderl);
     router.define(listTestPage, handler: listTestViewPage);
+    router.define(payBuyPage, handler: payPageHanderl);
   }
 }

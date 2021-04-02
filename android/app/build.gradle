@@ -28,12 +28,31 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 android {
     compileSdkVersion 28
 
+    // sourceSets {
+    //     main.java.srcDirs += 'src/main/kotlin'
+    // }
+
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
     }
 
     lintOptions {
         disable 'InvalidPackage'
+    }
+
+    signingConfigs {
+        debug {
+            //keystore中key的别名
+            keyAlias 'androiddebugkey'
+            //keystore中key的密码
+            keyPassword 'android'
+            //keystore的文件路径，可以是绝对路径也可以是相对路径
+            storeFile file('../debug.keystore')
+            //keystore的密码l
+            storePassword 'android'
+        }
     }
 
     defaultConfig {
@@ -43,6 +62,9 @@ android {
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        manifestPlaceholders = [
+            AMAP_KEY : "55b1b4cc7934383299c2fb538e0ac60f", /// 高德地图key
+        ]
     }
 
     buildTypes {
@@ -59,5 +81,10 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    //demo中引入高德地图SDK
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 }
+
+// dependencies {
+//     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+// }

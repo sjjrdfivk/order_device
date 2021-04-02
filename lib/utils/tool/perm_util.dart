@@ -31,4 +31,14 @@ class PermUtil {
     }
     return true;
   }
+
+  /// 位置权限申请
+  static Future<bool> locationPerm() async {
+    PermissionStatus status = await Permission.location.status;
+    if (status != PermissionStatus.granted) {
+      final statuses = await [Permission.location].request(); // 请求权限
+      return statuses[Permission.location] == PermissionStatus.granted;
+    }
+    return true;
+  }
 }

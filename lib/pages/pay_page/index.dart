@@ -6,6 +6,9 @@ import 'package:amap_flutter_map/amap_flutter_map.dart';
 import 'package:order_device/utils/const_config.dart';
 import 'package:order_device/utils/tool/perm_util.dart';
 
+// import 'package:amap_flutter_location/amap_flutter_location.dart';
+// import 'package:amap_flutter_location/amap_location_option.dart';
+
 class PayPage extends StatefulWidget {
   @override
   _DetailPageState createState() => _DetailPageState();

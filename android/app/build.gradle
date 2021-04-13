@@ -93,6 +93,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     //定位功能
     // implementation 'com.amap.api:location:latest.integration'
+    implementation('com.amap.api:location:5.2.0')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

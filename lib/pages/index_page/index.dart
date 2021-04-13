@@ -76,7 +76,7 @@ class _IndexPageState extends State<IndexPage> {
               SizedBox(height: 10.0),
               MaterialButton(
                 child: Text(
-                  '测试列表',
+                  '测试定位',
                   style: TextStyle(fontSize: 20.0, color: Colors.white),
                 ),
                 minWidth: 300.0,

@@ -44,6 +44,10 @@
             android:name="flutterEmbedding"
             android:value="2" />
          <!-- 配置定位Service -->
+         <!-- 配置ApiKey -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="55b1b4cc7934383299c2fb538e0ac60f" />
     <service android:name="com.amap.api.location.APSService"/>   
     </application>
     <!--访问网络-->

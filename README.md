@@ -1,20 +1,19 @@
-# order_device_flutter
-
-flutter 点餐练习项目
+# flutter 点餐练习项目
+# 目前只有android有定位及地图功能
 
 # 项目截图
 
 <div style="float:right">
   <img src="https://github.com/sjjrdfivk/order_device/blob/main/images/1.jpg" width="270"/>&nbsp;&nbsp;&nbsp;
   <img src="https://github.com/sjjrdfivk/order_device/blob/main/images/2.jpg" width="270"/>&nbsp;&nbsp;&nbsp;
-  <br/>
+  <br/><br/><br/>
   <img src="https://github.com/sjjrdfivk/order_device/blob/main/images/3.jpg" width="270"/>&nbsp;&nbsp;&nbsp;
   <img src="https://github.com/sjjrdfivk/order_device/blob/main/images/4.jpg" width="270"/>&nbsp;&nbsp;&nbsp;
-  <br/>
+  <br/><br/><br/>
   <img src="https://github.com/sjjrdfivk/order_device/blob/main/images/5.jpg" width="270"/>
 </div>
 
-生命周期整体分为三个部分：初始化 / 状态改变 / 销毁；
+# 生命周期整体分为三个部分：初始化 / 状态改变 / 销毁；
 
 initState 在整个生命周期中的初始化阶段只会调用一次；
 

@@ -7,8 +7,10 @@ flutter 点餐练习项目
 <div style="float:right">
   <img src="https://github.com/sjjrdfivk/order_device/blob/main/images/1.jpg" width="270"/>&nbsp;&nbsp;&nbsp;
   <img src="https://github.com/sjjrdfivk/order_device/blob/main/images/2.jpg" width="270"/>&nbsp;&nbsp;&nbsp;
+  <br/>
   <img src="https://github.com/sjjrdfivk/order_device/blob/main/images/3.jpg" width="270"/>&nbsp;&nbsp;&nbsp;
   <img src="https://github.com/sjjrdfivk/order_device/blob/main/images/4.jpg" width="270"/>&nbsp;&nbsp;&nbsp;
+  <br/>
   <img src="https://github.com/sjjrdfivk/order_device/blob/main/images/5.jpg" width="270"/>
 </div>
 

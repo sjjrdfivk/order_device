@@ -1,15 +1,16 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:amap_flutter_base/amap_flutter_base.dart';
+// import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:amap_flutter_map/amap_flutter_map.dart';
-// import 'package:amap_location/amap_location.dart';
 
 import 'package:order_device/utils/const_config.dart';
 import 'package:order_device/utils/tool/perm_util.dart';
 
+import 'package:amap_flutter_base/amap_flutter_base.dart';
+import 'package:amap_flutter_map/amap_flutter_map.dart';
 import 'package:amap_flutter_location/amap_flutter_location.dart';
 import 'package:amap_flutter_location/amap_location_option.dart';
+
+MediaQueryData mediaQuery;
 
 class PayPage extends StatefulWidget {
   @override
@@ -23,16 +24,14 @@ class _DetailPageState extends State<PayPage> {
 
   AMapFlutterLocation _locationPlugin = new AMapFlutterLocation();
 
-  // static final LatLng mapCenter =
-  //     const LatLng(22.569924150077508, 113.3461320322406);
-  double latitude = 22.569924150077508;
-  double longitude = 113.34614305287913;
+  double latitude = 39.909187;
+  double longitude = 116.397451;
   final Map<String, Marker> _initMarkerMap = <String, Marker>{};
 
   @override
   void initState() {
     super.initState();
-    _requestLocaitonPermission();
+    // _requestLocaitonPermission();
 
     ///注册定位结果监听
     _locationListener = _locationPlugin
@@ -40,9 +39,14 @@ class _DetailPageState extends State<PayPage> {
         .listen((Map<String, Object> result) {
       setState(() {
         _locationResult = result;
-        Object mapToStr = json.encode(result);
-        // print('_locationResult_locationResult${mapToStr.callbackTime}');
-        // latitude = double.parse(result.latitude);
+        _locationResult.forEach((key, value) {
+          if (key == 'latitude') {
+            latitude = value;
+          } else if (key == 'longitude') {
+            longitude = value;
+          }
+        });
+        _requestLocaitonPermission();
       });
     });
     _startLocation();
@@ -59,8 +63,6 @@ class _DetailPageState extends State<PayPage> {
     LatLng position = LatLng(latitude, longitude);
     Marker marker = Marker(position: position);
     _initMarkerMap[marker.id] = marker;
-    // PermissionStatus status = await Permission.location.request();
-    // print('permissionStatus=====> $status');
     _changeCameraPosition();
   }
 
@@ -70,7 +72,7 @@ class _DetailPageState extends State<PayPage> {
       AMapLocationOption locationOption = new AMapLocationOption();
 
       ///是否单次定位
-      locationOption.onceLocation = false;
+      locationOption.onceLocation = true;
 
       ///是否需要返回逆地理信息
       locationOption.needAddress = true;
@@ -84,7 +86,7 @@ class _DetailPageState extends State<PayPage> {
       locationOption.fullAccuracyPurposeKey = "AMapLocationScene";
 
       ///设置Android端连续定位的定位间隔
-      locationOption.locationInterval = 2000;
+      locationOption.locationInterval = 20000;
 
       ///设置Android端的定位模式<br>
       ///可选值：<br>
@@ -140,21 +142,56 @@ class _DetailPageState extends State<PayPage> {
       touchPoiEnabled: true,
       onMapCreated: onMapCreated,
     );
+    mediaQuery ??= MediaQuery.of(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('PayPage'),
-        centerTitle: true,
-      ),
-      body: ConstrainedBox(
-        constraints: BoxConstraints.expand(),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              height: 300,
-              width: MediaQuery.of(context).size.width,
-              child: map,
+      body: Listener(
+        child: CustomScrollView(
+          physics: ClampingScrollPhysics(),
+          slivers: <Widget>[
+            SliverAppBar(
+              pinned: true,
+              // title: Text("店铺首页", style: TextStyle(color: Colors.white)),
+              backgroundColor: Colors.blue,
+              expandedHeight: 300,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Container(child: map),
+              ),
             ),
+            SliverList(
+                delegate: SliverChildBuilderDelegate(
+                    (c, i) => Column(
+                          children: [
+                            Container(
+                              child: Card(
+                                margin: EdgeInsets.only(
+                                    right: 12, left: 12, top: 10, bottom: 0),
+                                child: Container(
+                                  height: 300,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              child: Card(
+                                margin: EdgeInsets.only(
+                                    right: 12, left: 12, top: 10, bottom: 0),
+                                child: Container(
+                                  height: 300,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              child: Card(
+                                margin: EdgeInsets.only(
+                                    right: 12, left: 12, top: 10, bottom: 0),
+                                child: Container(
+                                  height: 300,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                    childCount: 1))
           ],
         ),
       ),
@@ -174,7 +211,7 @@ class _DetailPageState extends State<PayPage> {
       CameraUpdate.newCameraPosition(
         CameraPosition(
             //中心点
-            target: LatLng(22.569924150077508, 113.3461320322406),
+            target: LatLng(latitude, longitude),
             //缩放级别
             zoom: 16,
             //俯仰角0°~45°（垂直与地图时为0）
